@@ -10,7 +10,7 @@ describe('ARD Mediathek Suche – Tagesschau Flow', () => {
       },
     });
   });
-//TEST 1
+//-----------------------------------TEST 1-------------------------------------------
   it('Öffnet die Suche und prüft Hauptelemente', () => {
     it('Öffnet die Suche - Selektor gezielt eingrenzen', () => {
       // Prüft: Gibt es mehrere Elemente mit href="/suche"?
@@ -30,7 +30,7 @@ describe('ARD Mediathek Suche – Tagesschau Flow', () => {
     });
 
   });
-//TEST 2
+//------------------------------------TEST 2------------------------------------------
   it('Führt eine Suche nach "Tagesschau" aus und prüft die Ergebnisse', () => {
     // 1. Klicke auf das Suche-Icon, um die Suchleiste zu öffnen
     cy.get('.bca1xh0 > .b1fv93sw > .bk8qx87 > .b11y8swf > :nth-child(1)') // Selektor für die Suche, basierend auf `href`
@@ -112,8 +112,39 @@ cy.focused()
   .should('have.value', 'Tagesschau'); // Prüfen, dass der vorherige Suchbegriff erhalten bleibt
 
 
-  });
+//--------------------------------TEST 5-----------------------------------------------------
+ // 1. Sicherstellen, dass die Ergebnisse/Section „Videos“ angezeigt wird
+ cy.get('body').click(0, 0); // Klick links oben auf die Seite
+ cy.get('.b3kngge').should('be.visible'); // Die Section „Videos“ laden
+
+ // 2. Speichere den Titel eines beliebigen Video-Teasers in einer Variablen
+ cy.get(':nth-child(1) > .bb65sj8') // Selektor für ein Teaser-Element im Bereich „Videos“
+   .first() // Wähle das erste Video aus der Liste (oder verwende `.eq(index)`, um ein bestimmtes auszuwählen)
+   .find('h3') // Der Selektor für den Titel-Text des Videos
+   .invoke('text') // Hol den sichtbaren Text (Titel des Videos)
+   .then((teaserTitle) => {
+     cy.log(`Gefundener Teaser-Titel: ${teaserTitle}`); // Logge den Titel in der Cypress-Konsole
+
+     // 3. Klicke auf das ausgewählte Teaser/Video
+     cy.get(':nth-child(1) > .bb65sj8').first().click();
+
+     
+
+     // 4. Vergleiche den Titel auf der Playerseite mit dem gespeicherten Teaser-Titel
+     cy.get('.h1rjbq0o') // Selektor für den Titel auf der Player-Seite
+       .should('be.visible') // Sicherstellen, dass der Titel sichtbar ist
+       .invoke('text') // Den sichtbaren Text (Titel) aus dem HTML holen
+       .should('eq', teaserTitle); // Sicherstellen, dass der Titel mit dem gespeicherten Teaser-Titel übereinstimmt
+
+     // 5. Prüfen, ob das Video im Player abgespielt wird
+     cy.get('video')
+  .should('have.attr', 'src') // Prüfen, ob das `src`-Attribut vorhanden ist
+  .and('match', /blob:/); // Sicherstellen, dass es sich um eine blob-Quelle handelt
+
+
   
 });
 
 
+  });
+});
