@@ -63,6 +63,42 @@ describe('ARD Mediathek Suche – Tagesschau Flow', () => {
     cy.get('.b3kngge') // Selektor oder Klasse für Teaser
       .should('exist') // Sicherstellen, dass Teaser existieren
       .and('have.length.at.least', 1); // Sicherstellen, dass mindestens 1 Teaser angezeigt wird
+
+      // Schließe das Suchvorschlagsfenster durch Klick außerhalb
+cy.get('body').click(0, 0); // Klick links oben auf die Seite
+
+       // 7. Suche die Sendungsseite der Tagesschau und klicke darauf
+       cy.get('.swiper-slide-next > .bt0tp5a > [style="height: 100%;"]') // Direkt das <a>-Element für die Tagesschau-Sendungsseite
+  .should('be.visible') // Sicherstellen, dass der Link sichtbar ist
+  .click(); // Klick auf die Tagesschau-Sendungsseite
+
+// 8. Prüfen, ob die Sendungsseite geöffnet wurde
+cy.url().should('include', '/sendung/tagesschau/Y3JpZDovL2Rhc2Vyc3RlLmRlL3RhZ2Vzc2NoYXU'); // Sicherstellen, dass die URL korrekt ist
+
+// 9. Auf der Sendungsseite: Prüfen, ob ein Bild-Banner vorhanden ist
+cy.get('.brvzu8x > .bt3d8jq > img') 
+  .should('exist') // Sicherstellen, dass der Bild-Banner existiert
+  .and('be.visible'); // Sicherstellen, dass er sichtbar ist
+
+// 10. Auf der Sendungsseite: Prüfen, ob der Titel und die Beschreibung sichtbar sind
+cy.get('.h1rjbq0o') // Selektor für den Titel der Tagesschau
+  .should('exist') // Sicherstellen, dass der Titel existiert
+  .and('be.visible'); // Sicherstellen, dass der Titel sichtbar ist
+
+  cy.get('._1quztox > .b1ja19fa') // Selektor für die Beschreibung
+  .should('exist') // Sicherstellen, dass die Beschreibung existiert
+  .and('be.visible'); // Sicherstellen, dass die Beschreibung sichtbar ist
+
+// 11. Prüfen, ob die Section „Alle Videos“ mit Teasern angezeigt wird
+cy.contains('Alle Videos') // Text „Alle Videos“ als Abschnittstitel verwenden
+  .should('exist') // Sicherstellen, dass die Section vorhanden ist
+  .and('be.visible'); // Sicherstellen, dass sie sichtbar ist
+
+  cy.get('#goToContent > :nth-child(3)') // Selektor für die Teaser
+  .should('exist') // Sicherstellen, dass Teaser vorhanden sind
+  .and('have.length.at.least', 1); // Sicherstellen, dass mindestens 1 Teaser angezeigt wird
   });
   
 });
+
+
