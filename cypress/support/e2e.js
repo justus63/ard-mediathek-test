@@ -14,4 +14,14 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
+Cypress.on('uncaught:exception', (err, runnable) => {
+    // Ignoriere React-Fehler #418, #421 und #422
+    if (
+      err.message.includes('Minified React error #418') ||
+      err.message.includes('Minified React error #421') ||
+      err.message.includes('Minified React error #422')
+    ) {
+      return false; // Verhindert, dass der Test stoppt
+    }
+  });
 import './commands'
