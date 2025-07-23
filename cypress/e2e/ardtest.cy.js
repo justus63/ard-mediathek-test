@@ -11,6 +11,24 @@ describe('ARD Mediathek Suche – Tagesschau Flow', () => {
     });
   });
 
+  it('Öffnet die Suche und prüft Hauptelemente', () => {
+    it('Öffnet die Suche - Selektor gezielt eingrenzen', () => {
+      // Prüft: Gibt es mehrere Elemente mit href="/suche"?
+      cy.get('a[href="/suche"]').then(($elements) => {
+        if ($elements.length > 1) {
+          cy.log('Es gibt mehrere Elemente. Verwende das erste.');
+        }
+      });
   
+      // Klickt gezielt auf das erste oder spezifische Element
+      cy.get('a[href="/suche"]').first().should('be.visible').click();
+  
+      // Sicherstellen, dass andere Elemente korrekt geladen werden
+      cy.get('[data-qa="search-input"]').should('be.visible');
+      cy.contains('Sendungen A–Z').should('exist');
+      cy.contains('Rubriken').should('exist');
+    });
+
+  });
   
 });
