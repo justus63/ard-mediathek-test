@@ -10,7 +10,7 @@ describe('ARD Mediathek Suche – Tagesschau Flow', () => {
       },
     });
   });
-
+//TEST 1
   it('Öffnet die Suche und prüft Hauptelemente', () => {
     it('Öffnet die Suche - Selektor gezielt eingrenzen', () => {
       // Prüft: Gibt es mehrere Elemente mit href="/suche"?
@@ -30,7 +30,7 @@ describe('ARD Mediathek Suche – Tagesschau Flow', () => {
     });
 
   });
-
+//TEST 2
   it('Führt eine Suche nach "Tagesschau" aus und prüft die Ergebnisse', () => {
     // 1. Klicke auf das Suche-Icon, um die Suchleiste zu öffnen
     cy.get('.bca1xh0 > .b1fv93sw > .bk8qx87 > .b11y8swf > :nth-child(1)') // Selektor für die Suche, basierend auf `href`
@@ -63,7 +63,7 @@ describe('ARD Mediathek Suche – Tagesschau Flow', () => {
     cy.get('.b3kngge') // Selektor oder Klasse für Teaser
       .should('exist') // Sicherstellen, dass Teaser existieren
       .and('have.length.at.least', 1); // Sicherstellen, dass mindestens 1 Teaser angezeigt wird
-
+//---------------------------TEST 3-----------------------------------------------------------------------
       // Schließe das Suchvorschlagsfenster durch Klick außerhalb
 cy.get('body').click(0, 0); // Klick links oben auf die Seite
 
@@ -97,6 +97,21 @@ cy.contains('Alle Videos') // Text „Alle Videos“ als Abschnittstitel verwend
   cy.get('#goToContent > :nth-child(3)') // Selektor für die Teaser
   .should('exist') // Sicherstellen, dass Teaser vorhanden sind
   .and('have.length.at.least', 1); // Sicherstellen, dass mindestens 1 Teaser angezeigt wird
+
+//--------------------------------TEST 4-----------------------------------------------------
+// 1. Navigiere zurück zur vorherigen Seite (Suche)
+cy.go('back'); // Zurücknavigieren
+
+// 2. Sicherstellen, dass die Suchseite erneut geladen wird
+cy.url().should('include', '/suche'); // Prüfen, ob die URL erneut „/suche“ enthält
+
+// 3. Sicherstellen, dass der Suchbegriff „Tagesschau“ noch in der Suchleiste vorhanden ist
+cy.get(':nth-child(2) > .b1y4zfs4')
+.click();
+cy.focused()
+  .should('have.value', 'Tagesschau'); // Prüfen, dass der vorherige Suchbegriff erhalten bleibt
+
+
   });
   
 });
